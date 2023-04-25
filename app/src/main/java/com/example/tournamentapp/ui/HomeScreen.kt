@@ -45,7 +45,7 @@ fun HomeScreen(
             .padding(20.dp),
     ) {
         Column() {
-            ImageTrophy()
+            ImageTrophy(navController = navController)
             LatestTournaments(
                 lightGradient = lightGradient,
                 tournaments = tournaments,

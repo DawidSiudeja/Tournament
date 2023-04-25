@@ -26,7 +26,7 @@ fun TournamentResult(
             .padding(20.dp),
     ) {
         Column() {
-            ImageTrophy()
+            ImageTrophy(navController = navController)
             StepsMTR(activeStep = 2, navController = navController, tournamentId = tournamentId)
             Text("Result")
         }

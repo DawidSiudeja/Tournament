@@ -41,7 +41,7 @@ fun AddTournament(navController: NavController) {
             .padding(20.dp),
     ) {
         Column() {
-            ImageTrophy()
+            ImageTrophy(navController = navController)
             Text(
                 text = "Add Tournament",
                 fontSize = 22.sp,

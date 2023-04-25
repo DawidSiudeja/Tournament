@@ -2,6 +2,7 @@ package com.example.tournamentapp.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +28,9 @@ import com.example.tournamentapp.ui.theme.textColor
 
 
 @Composable
-fun ImageTrophy() {
+fun ImageTrophy(
+    navController: NavController
+) {
     Box(
         modifier = Modifier
             .height(100.dp)
@@ -36,7 +39,11 @@ fun ImageTrophy() {
     ) {
         Image(
             painterResource(R.drawable.ic_trophy),
-            contentDescription = "Trophy"
+            contentDescription = "Trophy",
+            modifier = Modifier
+                .clickable {
+                    navigate(navController = navController, destination = Screen.MainScreen)
+                }
         )
     }
 }

@@ -55,7 +55,7 @@ fun TournamentUpcomingMatches(
             .padding(20.dp),
     ) {
         Column() {
-            ImageTrophy()
+            ImageTrophy(navController = navController)
 
             StepsMTR(0, navController, tournamentId)
 
@@ -159,7 +159,7 @@ fun StepsMTR (
                         arguments = listOf(tournamentId)
                     )
                 },
-            fontWeight = if (activeStep == 1) {
+            fontWeight = if (activeStep == 2) {
                 FontWeight.Bold
             } else {
                 FontWeight.Normal
