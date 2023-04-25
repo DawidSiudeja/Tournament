@@ -5,4 +5,6 @@ sealed class Screen(val route: String) {
     object AddTournament: Screen("add_tournament_screen")
     object AddTournamentFinal: Screen("add_tournament_final_screen")
     object TournamentUpcomingMatches: Screen("tournament_upcoming_matches")
+    object TournamentTable: Screen("tournament_table")
+    object TournamentResult: Screen("tournament_result")
 }

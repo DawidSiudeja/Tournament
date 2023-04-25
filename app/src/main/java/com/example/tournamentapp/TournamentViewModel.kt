@@ -1,6 +1,7 @@
 package com.example.tournamentapp
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tournamentapp.database.AppDatabase
@@ -14,20 +15,12 @@ import kotlinx.coroutines.launch
 class TournamentViewModel(application: Application): AndroidViewModel(application) {
     private val repository: TournamentsRepository
 
-    private val _tournaments = MutableStateFlow<List<Tournament>>(emptyList())
-    val tournaments: MutableStateFlow<List<Tournament>> = _tournaments
 
 
 
     init {
         val tournamentDatabase = AppDatabase.getDatabase(application).TournamentsDao()
         repository = TournamentsRepository(tournamentDatabase)
-
-        viewModelScope.launch {
-            repository.getAllTournaments().collect { tournaments ->
-                _tournaments.value = tournaments
-            }
-        }
 
     }
 
@@ -39,6 +32,30 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
 
     fun getSpecifTournament(tournamentId: Int): Flow<Tournament?> {
         return repository.getSpecifTournament(tournamentId)
+    }
+
+    fun generateMatches(tournament: Tournament): List<String> {
+
+        var upcomingMatches: List<String> = emptyList()
+
+        val listOfPlayers = tournament.players
+            .trim('[', ']')
+            .split(", ")
+            .map {
+                it.trim('"')
+            }
+
+        val size = listOfPlayers.size
+
+        for (i in 0 until size) {
+            for (j in i+1 until size) {
+                val pair = "${listOfPlayers[i]} vs ${listOfPlayers[j]}"
+                upcomingMatches += pair
+            }
+        }
+        upcomingMatches = upcomingMatches.shuffled()
+
+        return upcomingMatches
     }
 
 }

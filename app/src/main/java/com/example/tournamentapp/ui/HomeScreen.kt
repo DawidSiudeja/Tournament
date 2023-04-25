@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.tournamentapp.MainViewModel
 import com.example.tournamentapp.TournamentViewModel
 import com.example.tournamentapp.database.Tournament
 import com.example.tournamentapp.navigation.Screen
@@ -31,7 +32,7 @@ import com.example.tournamentapp.ui.navigate
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: TournamentViewModel
+    viewModel: MainViewModel
 ) {
 
     val tournaments =  viewModel.tournaments.collectAsState().value

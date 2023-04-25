@@ -10,6 +10,8 @@ import androidx.navigation.navArgument
 import com.example.tournamentapp.TournamentViewModel
 import com.example.tournamentapp.ui.AddTournament
 import com.example.tournamentapp.ui.AddTournamentFinal
+import com.example.tournamentapp.ui.TournamentResult
+import com.example.tournamentapp.ui.TournamentTable
 import com.example.tournamentapp.ui.TournamentUpcomingMatches
 import com.example.tournamentapp.ui.theme.HomeScreen
 
@@ -67,6 +69,42 @@ fun Navigation() {
 
             val tournamentId = requireNotNull(backStackEntry.arguments).getString("tournamentId").toString()
             TournamentUpcomingMatches(
+                tournamentId = tournamentId,
+                navController = navController,
+                viewModel = viewModel()
+            )
+        }
+
+        composable(route = Screen.TournamentTable.route +
+                "/{tournamentId}",
+            arguments = listOf(navArgument(
+                name = "tournamentId"
+            ) {
+                type = NavType.StringType
+                defaultValue = ""
+            }),
+        ) { backStackEntry ->
+
+            val tournamentId = requireNotNull(backStackEntry.arguments).getString("tournamentId").toString()
+            TournamentTable(
+                tournamentId = tournamentId,
+                navController = navController,
+                viewModel = viewModel()
+            )
+        }
+
+        composable(route = Screen.TournamentResult.route +
+                "/{tournamentId}",
+            arguments = listOf(navArgument(
+                name = "tournamentId"
+            ) {
+                type = NavType.StringType
+                defaultValue = ""
+            }),
+        ) { backStackEntry ->
+
+            val tournamentId = requireNotNull(backStackEntry.arguments).getString("tournamentId").toString()
+            TournamentResult(
                 tournamentId = tournamentId,
                 navController = navController,
                 viewModel = viewModel()

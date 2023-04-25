@@ -65,7 +65,6 @@ fun AddTournamentFinal(
                 modifier = Modifier
                     .fillMaxHeight(1f)
             )
-            val formList = basicInfoList + players
             BottomMenu(
                 tournamentOption = "START TOURNAMENT",
                 action = {
