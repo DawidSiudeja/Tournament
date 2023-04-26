@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TournamentsDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun upsertTournament(tournament: Tournament)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun upsertTournament(tournament: Tournament): Long
 
     @Delete
     suspend fun deleteTournament(tournament: Tournament)

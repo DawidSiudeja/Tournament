@@ -27,5 +27,5 @@ data class SingleMatch(
     val isFinished: Boolean = false,
 
     @ColumnInfo
-    val tournamentId: Int,
+    val tournamentId: Long,
 )

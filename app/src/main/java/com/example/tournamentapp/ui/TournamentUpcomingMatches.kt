@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.tournamentapp.TournamentViewModel
+import com.example.tournamentapp.database.match.SingleMatch
 import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.navigation.Screen
 import com.example.tournamentapp.ui.theme.darkGradient
@@ -46,7 +47,10 @@ fun TournamentUpcomingMatches(
             )
         ).value
 
-    val upcomingMatches = listOf("Test vs Test2")
+    val upcomingMatches = viewModel.getSpecifMatches(tournamentId.toInt())
+        .collectAsState(emptyList()).value
+
+    //val upcomingMatches = listOf("Test vs Test2")
 
 
 
@@ -82,7 +86,7 @@ fun TournamentUpcomingMatches(
 
 @Composable
 fun ListOfMatches(
-    upcomingMatches: List<String>,
+    upcomingMatches: List<SingleMatch>,
     modifier: Modifier,
 ) {
 
@@ -99,7 +103,7 @@ fun ListOfMatches(
             Text(
                 modifier = Modifier
                     .padding(vertical = 16.dp),
-                text = upcomingMatches[it],
+                text = upcomingMatches[it].player1 + " vs " + upcomingMatches[it].player2,
                 color = textColor,
                 fontSize = 16.sp
             )

@@ -1,6 +1,7 @@
 package com.example.tournamentapp
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.Date
+import kotlin.math.absoluteValue
 
 class TournamentViewModel(application: Application): AndroidViewModel(application) {
 
@@ -34,8 +36,11 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
 
     fun addTournament(tournament: Tournament) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertTournament(tournament)
-            generateMatchesFFA(tournament)
+            val tournamentId = repository.insertTournament(tournament)
+
+            Log.d("TOUR 1", tournamentId.toString())
+
+            generateMatchesFFA(tournamentId = tournamentId, tournament = tournament)
         }
     }
 
@@ -43,7 +48,11 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
         return repository.getSpecifTournament(tournamentId)
     }
 
-    private suspend fun generateMatchesFFA(tournament: Tournament) {
+    fun getSpecifMatches(tournamentId: Int): Flow<List<SingleMatch>> {
+        return singleMatchRepository.getAllMatches(tournamentId)
+    }
+
+    private suspend fun generateMatchesFFA(tournamentId: Long, tournament: Tournament) {
 
         val listOfPlayers = tournament.players
             .trim('[', ']')
@@ -59,7 +68,7 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
                 singleMatchRepository.insertMatch(SingleMatch(
                     player1 = listOfPlayers[i],
                     player2 = listOfPlayers[j],
-                    tournamentId = tournament.id
+                    tournamentId = tournamentId
                 ))
             }
         }
