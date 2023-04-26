@@ -1,6 +1,5 @@
 package com.example.tournamentapp.ui
 
-import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import com.example.tournamentapp.TournamentViewModel
-import com.example.tournamentapp.database.Tournament
+import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.ui.theme.goldColor
 import com.example.tournamentapp.ui.theme.lightBlueGradient
 import com.example.tournamentapp.ui.theme.redColor

@@ -6,26 +6,27 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.tournamentapp.TournamentViewModel
-import com.example.tournamentapp.database.Tournament
+import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.navigation.Screen
 import com.example.tournamentapp.ui.theme.darkGradient
+import com.example.tournamentapp.ui.theme.lightGradient
 import com.example.tournamentapp.ui.theme.textColor
 
 
@@ -40,12 +41,13 @@ fun TournamentUpcomingMatches(
             initial = Tournament(
                 id = -1,
                 title = "",
-                players = emptyList<String>().toString(),
+                players = "",
                 gameType = ""
             )
         ).value
 
     val upcomingMatches = listOf("Test vs Test2")
+
 
 
     Box(
@@ -56,15 +58,19 @@ fun TournamentUpcomingMatches(
     ) {
         Column() {
             ImageTrophy(navController = navController)
-
+            Text(
+                text = tournament!!.title,
+                fontSize = 22.sp,
+                color = textColor,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(bottom = 10.dp)
+            )
             StepsMTR(0, navController, tournamentId)
-
             ListOfMatches(
                 upcomingMatches = upcomingMatches,
                 modifier = Modifier
             )
-
-
             BottomMenu(tournamentOption = "END TOURNAMENT") {
                 navigate(navController, Screen.MainScreen)
             }
@@ -83,12 +89,16 @@ fun ListOfMatches(
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
         contentPadding = PaddingValues(start = 0.dp, top = 10.dp, end = 0.dp, bottom = 10.dp),
-        modifier = Modifier.fillMaxHeight(.85f)
+        modifier = Modifier
+            .fillMaxHeight(.85f)
+            .clip(RoundedCornerShape(10.dp))
+            .background(brush = lightGradient)
+            .padding(horizontal = 16.dp)
     ) {
         items(upcomingMatches.size) {
             Text(
                 modifier = Modifier
-                    .padding(vertical = 15.dp),
+                    .padding(vertical = 16.dp),
                 text = upcomingMatches[it],
                 color = textColor,
                 fontSize = 16.sp

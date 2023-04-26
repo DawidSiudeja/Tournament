@@ -1,19 +1,24 @@
 package com.example.tournamentapp
 
 import android.app.Application
-import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tournamentapp.database.AppDatabase
-import com.example.tournamentapp.database.Tournament
-import com.example.tournamentapp.database.TournamentsRepository
+import com.example.tournamentapp.database.match.SingleMatch
+import com.example.tournamentapp.database.match.SingleMatchRepository
+import com.example.tournamentapp.database.tournament.Tournament
+import com.example.tournamentapp.database.tournament.TournamentsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class TournamentViewModel(application: Application): AndroidViewModel(application) {
+
     private val repository: TournamentsRepository
+    private val singleMatchRepository: SingleMatchRepository
 
 
 
@@ -22,11 +27,15 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
         val tournamentDatabase = AppDatabase.getDatabase(application).TournamentsDao()
         repository = TournamentsRepository(tournamentDatabase)
 
+        val singleMatchDatabase = AppDatabase.getDatabase(application).SingleMatchDao()
+        singleMatchRepository = SingleMatchRepository(singleMatchDatabase)
+
     }
 
     fun addTournament(tournament: Tournament) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertTournament(tournament)
+            generateMatchesFFA(tournament)
         }
     }
 
@@ -34,9 +43,7 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
         return repository.getSpecifTournament(tournamentId)
     }
 
-    fun generateMatches(tournament: Tournament): List<String> {
-
-        var upcomingMatches: List<String> = emptyList()
+    private suspend fun generateMatchesFFA(tournament: Tournament) {
 
         val listOfPlayers = tournament.players
             .trim('[', ']')
@@ -49,13 +56,12 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
 
         for (i in 0 until size) {
             for (j in i+1 until size) {
-                val pair = "${listOfPlayers[i]} vs ${listOfPlayers[j]}"
-                upcomingMatches += pair
+                singleMatchRepository.insertMatch(SingleMatch(
+                    player1 = listOfPlayers[i],
+                    player2 = listOfPlayers[j],
+                    tournamentId = tournament.id
+                ))
             }
         }
-        upcomingMatches = upcomingMatches.shuffled()
-
-        return upcomingMatches
     }
-
 }

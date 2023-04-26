@@ -5,11 +5,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.tournamentapp.database.match.SingleMatch
+import com.example.tournamentapp.database.match.SingleMatchDao
+import com.example.tournamentapp.database.tournament.Tournament
+import com.example.tournamentapp.database.tournament.TournamentsDao
 
-@Database(entities = [Tournament::class], version = 1)
+@Database(entities = [Tournament::class, SingleMatch::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun TournamentsDao(): TournamentsDao
+    abstract fun SingleMatchDao(): SingleMatchDao
 
     companion object {
 

@@ -1,4 +1,4 @@
-package com.example.tournamentapp.database
+package com.example.tournamentapp.database.tournament
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -31,5 +31,4 @@ data class Tournament(
     @ColumnInfo
     val isFinished: Boolean = false,
 
-
-    )
+)

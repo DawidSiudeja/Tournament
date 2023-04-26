@@ -1,4 +1,4 @@
-package com.example.tournamentapp.database
+package com.example.tournamentapp.database.tournament
 
 class TournamentsRepository(private val tournamentsDao: TournamentsDao) {
 

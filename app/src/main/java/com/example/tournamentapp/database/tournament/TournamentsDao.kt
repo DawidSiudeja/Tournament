@@ -1,4 +1,4 @@
-package com.example.tournamentapp.database
+package com.example.tournamentapp.database.tournament
 
 import androidx.room.Dao
 import androidx.room.Delete

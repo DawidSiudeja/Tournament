@@ -2,11 +2,10 @@ package com.example.tournamentapp
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tournamentapp.database.AppDatabase
-import com.example.tournamentapp.database.Tournament
-import com.example.tournamentapp.database.TournamentsRepository
+import com.example.tournamentapp.database.tournament.Tournament
+import com.example.tournamentapp.database.tournament.TournamentsRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
