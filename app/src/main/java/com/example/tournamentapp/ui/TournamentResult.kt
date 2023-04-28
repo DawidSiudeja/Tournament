@@ -1,17 +1,53 @@
 package com.example.tournamentapp.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.tournamentapp.R
 import com.example.tournamentapp.TournamentViewModel
+import com.example.tournamentapp.database.match.SingleMatch
+import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.ui.theme.darkGradient
+import com.example.tournamentapp.ui.theme.goldColor
+import com.example.tournamentapp.ui.theme.lightGradient
+import com.example.tournamentapp.ui.theme.textColor
 
 @Composable
 fun TournamentResult(
@@ -19,6 +55,20 @@ fun TournamentResult(
     navController: NavController,
     viewModel: TournamentViewModel
 ) {
+
+    val tournament = viewModel.getSpecifTournament(tournamentId.toInt())
+        .collectAsState(
+            initial = Tournament(
+                id = -1,
+                title = "",
+                players = "",
+                gameType = ""
+            )
+        ).value
+
+    val results = viewModel.getSpecifMatches(tournamentId.toInt())
+        .collectAsState(emptyList()).value
+
     Box(
         modifier = Modifier
             .background(darkGradient)
@@ -27,8 +77,87 @@ fun TournamentResult(
     ) {
         Column() {
             ImageTrophy(navController = navController)
+
+            Text(
+                text = tournament!!.title,
+                fontSize = 22.sp,
+                color = textColor,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(bottom = 10.dp)
+            )
+
             StepsMTR(activeStep = 2, navController = navController, tournamentId = tournamentId)
-            Text("Result")
+
+            ListOfResults(
+                results = results.reversed(),
+                modifier = Modifier,
+                viewModel = viewModel
+            )
         }
+    }
+}
+
+
+
+
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ListOfResults(
+    results: List<SingleMatch>,
+    modifier: Modifier,
+    viewModel: TournamentViewModel
+) {
+
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(1),
+        contentPadding = PaddingValues(start = 0.dp, top = 10.dp, end = 0.dp, bottom = 10.dp),
+        modifier = Modifier
+            .fillMaxHeight(.85f)
+            .clip(RoundedCornerShape(10.dp))
+            .background(brush = lightGradient)
+            .padding(horizontal = 16.dp)
+    ) {
+        items(results.size) {
+
+            if (results[it].isFinished) {
+                Row(
+                    modifier = Modifier
+                        .padding(bottom = 15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(vertical = 16.dp)
+                            .fillMaxWidth(.5f),
+                        text = results[it].player1 + " " + results[it].player1Score
+                                + " vs " +
+                                results[it].player2Score + " " + results[it].player2,
+                        color = textColor,
+                        fontSize = 16.sp
+                    )
+                    Button(
+                        onClick = {
+                                  viewModel.makeEditableScoreMatch(results[it].matchId)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = goldColor
+                        ),
+                        modifier = Modifier
+                            .width(50.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_done),
+                            contentDescription = "Edit score",
+                        )
+                    }
+                }
+            }
+        }
+
     }
 }

@@ -73,4 +73,18 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
             }
         }
     }
+
+    fun setScoreOfMatch(player1Score: String, player2Score: String, matchId: Int) {
+        viewModelScope.launch {
+            singleMatchRepository.updatePlayer1Score(player1Score,matchId)
+            singleMatchRepository.updatePlayer2Score(player2Score,matchId)
+            singleMatchRepository.matchIsFinished(true, matchId)
+        }
+    }
+
+    fun makeEditableScoreMatch(matchId: Int) {
+        viewModelScope.launch {
+            singleMatchRepository.matchIsFinished(false, matchId)
+        }
+    }
 }

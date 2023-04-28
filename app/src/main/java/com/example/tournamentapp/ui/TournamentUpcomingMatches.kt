@@ -1,36 +1,64 @@
 package com.example.tournamentapp.ui
 
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.tournamentapp.R
 import com.example.tournamentapp.TournamentViewModel
 import com.example.tournamentapp.database.match.SingleMatch
 import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.navigation.Screen
 import com.example.tournamentapp.ui.theme.darkGradient
+import com.example.tournamentapp.ui.theme.goldColor
+import com.example.tournamentapp.ui.theme.lightBlueGradient
 import com.example.tournamentapp.ui.theme.lightGradient
+import com.example.tournamentapp.ui.theme.redColor
 import com.example.tournamentapp.ui.theme.textColor
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TournamentUpcomingMatches(
     tournamentId: String,
@@ -50,8 +78,6 @@ fun TournamentUpcomingMatches(
     val upcomingMatches = viewModel.getSpecifMatches(tournamentId.toInt())
         .collectAsState(emptyList()).value
 
-    //val upcomingMatches = listOf("Test vs Test2")
-
 
 
     Box(
@@ -62,6 +88,7 @@ fun TournamentUpcomingMatches(
     ) {
         Column() {
             ImageTrophy(navController = navController)
+
             Text(
                 text = tournament!!.title,
                 fontSize = 22.sp,
@@ -73,7 +100,8 @@ fun TournamentUpcomingMatches(
             StepsMTR(0, navController, tournamentId)
             ListOfMatches(
                 upcomingMatches = upcomingMatches,
-                modifier = Modifier
+                modifier = Modifier,
+                viewModel = viewModel
             )
             BottomMenu(tournamentOption = "END TOURNAMENT") {
                 navigate(navController, Screen.MainScreen)
@@ -84,11 +112,14 @@ fun TournamentUpcomingMatches(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListOfMatches(
     upcomingMatches: List<SingleMatch>,
     modifier: Modifier,
+    viewModel: TournamentViewModel
 ) {
+
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
@@ -100,14 +131,89 @@ fun ListOfMatches(
             .padding(horizontal = 16.dp)
     ) {
         items(upcomingMatches.size) {
-            Text(
-                modifier = Modifier
-                    .padding(vertical = 16.dp),
-                text = upcomingMatches[it].player1 + " vs " + upcomingMatches[it].player2,
-                color = textColor,
-                fontSize = 16.sp
-            )
+
+            var playersScore1 by remember { mutableStateOf(List(upcomingMatches.size) { "" }) }
+            var playersScore2 by remember { mutableStateOf(List(upcomingMatches.size) { "" }) }
+
+            if (!upcomingMatches[it].isFinished) {
+                Row(
+                    modifier = Modifier
+                        .padding(bottom = 15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(vertical = 16.dp)
+                            .fillMaxWidth(.5f),
+                        text = upcomingMatches[it].player1 + " vs " + upcomingMatches[it].player2,
+                        color = textColor,
+                        fontSize = 16.sp
+                    )
+                    TextField(
+                        value = playersScore1[it],
+                        onValueChange = {  newValue ->
+                            playersScore1 = playersScore1.toMutableList().apply {
+                                set(it, newValue)
+                            }
+                        },
+                        singleLine = true,
+                        textStyle = TextStyle(fontSize = 12.sp),
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier
+                            .width(50.dp)
+                            .aspectRatio(1f)
+                            .padding(end = 2.5.dp)
+                            .border(width = 2.dp, color = textColor, shape = RoundedCornerShape(10.dp)),
+
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = textColor,
+                            containerColor = Color.Transparent,
+                        ),
+                    )
+                    TextField(
+                        value = playersScore2[it],
+                        onValueChange = {  newValue ->
+                            playersScore2 = playersScore2.toMutableList().apply {
+                                set(it, newValue)
+                            }
+                        },
+                        singleLine = true,
+                        textStyle = TextStyle(fontSize = 12.sp),
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        modifier = Modifier
+                            .width(50.dp)
+                            .aspectRatio(1f)
+                            .padding(start = 2.5.dp)
+                            .border(width = 2.dp, color = textColor, shape = RoundedCornerShape(10.dp))
+                        ,
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = textColor,
+                            containerColor = Color.Transparent,
+                        ),
+                    )
+                    Button(
+                        onClick = {
+                            viewModel.setScoreOfMatch(
+                                player1Score = playersScore1[it],
+                                player2Score = playersScore2[it],
+                                matchId = upcomingMatches[it].matchId
+                            )
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = goldColor
+                        ),
+                        modifier = Modifier
+                            .width(50.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_done),
+                            contentDescription = "Set Score",
+                        )
+                    }
+                }
+            }
         }
+
     }
 }
 

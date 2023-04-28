@@ -18,4 +18,12 @@ interface SingleMatchDao {
     @Query("DELETE FROM single_match_table WHERE tournamentId = :tournamentId")
     suspend fun deleteAllMatchesFromTournament(tournamentId: Int)
 
+    @Query("UPDATE single_match_table SET player1Score = :player1Score WHERE matchId = :matchId")
+    suspend fun updatePlayer1Score(player1Score: String, matchId: Int)
+
+    @Query("UPDATE single_match_table SET player2Score = :player2Score WHERE matchId = :matchId")
+    suspend fun updatePlayer2Score(player2Score: String, matchId: Int)
+
+    @Query("UPDATE single_match_table SET isFinished = :isFinished WHERE matchId = :matchId")
+    suspend fun matchIsFinished(isFinished: Boolean, matchId: Int)
 }
