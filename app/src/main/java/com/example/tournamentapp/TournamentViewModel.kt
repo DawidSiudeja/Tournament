@@ -14,8 +14,10 @@ import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.database.tournament.TournamentsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
@@ -28,7 +30,8 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
     private val singleMatchRepository: SingleMatchRepository
     private val playerStatsRepository: PlayerStatsRepository
 
-
+    private val _playerList = MutableStateFlow<List<PlayerStats>>(emptyList())
+    val playerList: MutableStateFlow<List<PlayerStats>> = _playerList
 
     init {
 
@@ -40,6 +43,7 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
 
         val playerStatsDatabase = AppDatabase.getDatabase(application).PlayerStatsDao()
         playerStatsRepository = PlayerStatsRepository(playerStatsDatabase)
+
 
     }
 
@@ -105,24 +109,21 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
                         player1Score: String,
                         player2Score: String,
                         matchId: Int,
-                        tournament: Tournament
+                        tournament: Tournament,
     ) {
         viewModelScope.launch {
             singleMatchRepository.updatePlayer1Score(player1Score,matchId)
             singleMatchRepository.updatePlayer2Score(player2Score,matchId)
             singleMatchRepository.matchIsFinished(true, matchId)
 
-
+            val playerList = playerStatsRepository.getAllPlayerStats(tournament.id).first()
 
 
             var player1Score = player1Score.toInt()
             var player2Score = player2Score.toInt()
 
 
-            val playerList = playerStatsRepository.getAllPlayerStats(tournament.id)
-                .flatMapConcat { it.asFlow() }.toList()
 
-            Log.d("TEST", playerList.toString())
 
             // Draw
             if (player1Score == player2Score) {
