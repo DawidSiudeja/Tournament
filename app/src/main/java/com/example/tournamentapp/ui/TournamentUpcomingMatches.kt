@@ -79,7 +79,6 @@ fun TournamentUpcomingMatches(
         .collectAsState(emptyList()).value
 
 
-
     Box(
         modifier = Modifier
             .background(darkGradient)
@@ -101,7 +100,8 @@ fun TournamentUpcomingMatches(
             ListOfMatches(
                 upcomingMatches = upcomingMatches,
                 modifier = Modifier,
-                viewModel = viewModel
+                viewModel = viewModel,
+                tournament = tournament
             )
             BottomMenu(tournamentOption = "END TOURNAMENT") {
                 navigate(navController, Screen.MainScreen)
@@ -117,7 +117,8 @@ fun TournamentUpcomingMatches(
 fun ListOfMatches(
     upcomingMatches: List<SingleMatch>,
     modifier: Modifier,
-    viewModel: TournamentViewModel
+    viewModel: TournamentViewModel,
+    tournament: Tournament
 ) {
 
 
@@ -194,9 +195,12 @@ fun ListOfMatches(
                     Button(
                         onClick = {
                             viewModel.setScoreOfMatch(
+                                player1 = upcomingMatches[it].player1,
+                                player2 = upcomingMatches[it].player2,
                                 player1Score = playersScore1[it],
                                 player2Score = playersScore2[it],
-                                matchId = upcomingMatches[it].matchId
+                                matchId = upcomingMatches[it].matchId,
+                                tournament = tournament
                             )
                         },
                         colors = ButtonDefaults.buttonColors(

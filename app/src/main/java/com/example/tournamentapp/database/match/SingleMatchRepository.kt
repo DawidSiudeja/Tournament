@@ -9,14 +9,14 @@ class SingleMatchRepository(private val singleMatchDao: SingleMatchDao) {
         = singleMatchDao.getAllMatches(tournamentId)
 
     suspend fun deleteAllMatchesFromTournament(tournamentId: Int)
-            = singleMatchDao.deleteAllMatchesFromTournament(tournamentId)
+        = singleMatchDao.deleteAllMatchesFromTournament(tournamentId)
 
     suspend fun updatePlayer1Score(player1Score: String, matchId: Int)
-            = singleMatchDao.updatePlayer1Score(player1Score, matchId)
+        = singleMatchDao.updatePlayer1Score(player1Score, matchId)
 
     suspend fun updatePlayer2Score(player2Score: String, matchId: Int)
-            = singleMatchDao.updatePlayer2Score(player2Score, matchId)
+        = singleMatchDao.updatePlayer2Score(player2Score, matchId)
 
     suspend fun matchIsFinished(isFinished: Boolean, matchId: Int)
-            = singleMatchDao.matchIsFinished(isFinished = isFinished, matchId = matchId)
+        = singleMatchDao.matchIsFinished(isFinished = isFinished, matchId = matchId)
 }
