@@ -18,9 +18,14 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -49,6 +54,7 @@ import com.example.tournamentapp.navigation.Screen
 import com.example.tournamentapp.ui.theme.darkGradient
 import com.example.tournamentapp.ui.theme.goldColor
 import com.example.tournamentapp.ui.theme.lightGradient
+import com.example.tournamentapp.ui.theme.redColor
 import com.example.tournamentapp.ui.theme.textColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -84,14 +90,16 @@ fun TournamentResult(
         Column() {
             ImageTrophy(navController = navController)
 
-            Text(
-                text = tournament!!.title,
-                fontSize = 22.sp,
-                color = textColor,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(bottom = 10.dp)
-            )
+            if (tournament != null) {
+                Text(
+                    text = tournament.title,
+                    fontSize = 22.sp,
+                    color = textColor,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                )
+            }
 
             StepsMTR(activeStep = 2, navController = navController, tournamentId = tournamentId)
 
@@ -105,13 +113,12 @@ fun TournamentResult(
                 tournamentOption = "END TOURNAMENT",
                 deleteButton = true,
                 deleteTournament = {
-                    navigate(navController, Screen.MainScreen)
-
                     scope.launch {
-                        delay(500)
-                        viewModel.deleteTournament(tournament)
+                        if (tournament != null) {
+                            viewModel.deleteTournament(tournament)
+                        }
                     }
-
+                    navigate(navController, Screen.MainScreen)
                 },
                 action = { navigate(navController, Screen.MainScreen) },
             )
@@ -157,31 +164,32 @@ fun ListOfResults(
                             .padding(vertical = 16.dp)
                             .fillMaxWidth(.5f),
                         text = results[it].player1 + " " + results[it].player1Score
-                                + " vs " +
+                                + " - " +
                                 results[it].player2Score + " " + results[it].player2,
                         color = textColor,
                         fontSize = 16.sp
                     )
-                    Button(
-                        onClick = {
-                                  viewModel.makeEditableScoreMatch(
-                                      results[it].matchId,
-                                      results[it].player1,
-                                      results[it].player2,
-                                      results[it].player1Score,
-                                      results[it].player2Score,
-                                      tournamentId = tournamentId
-                                  )
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = goldColor
-                        ),
+
+                    Box(
                         modifier = Modifier
-                            .width(50.dp)
+                            .padding(vertical = 0.dp)
+                            .clip(RoundedCornerShape(100))
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_done),
-                            contentDescription = "Edit score",
+                        IconButton(
+                            onClick = { viewModel.makeEditableScoreMatch(
+                                results[it].matchId,
+                                results[it].player1,
+                                results[it].player2,
+                                results[it].player1Score,
+                                results[it].player2Score,
+                                tournamentId = tournamentId) },
+                            content = {
+                                Icon(
+                                    Icons.Filled.Refresh,
+                                    contentDescription = "refresh match",
+                                    tint = textColor
+                                )
+                            }
                         )
                     }
                 }

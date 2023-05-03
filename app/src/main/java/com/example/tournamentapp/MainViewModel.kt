@@ -8,14 +8,20 @@ import com.example.tournamentapp.database.match.SingleMatchRepository
 import com.example.tournamentapp.database.points.PlayerStatsRepository
 import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.database.tournament.TournamentsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
 
     private val repository: TournamentsRepository
+    private val singleMatchRepository: SingleMatchRepository
+    private val playerStatsRepository: PlayerStatsRepository
+
+
 
     private val _tournaments = MutableStateFlow<List<Tournament>>(emptyList())
     val tournaments: MutableStateFlow<List<Tournament>> = _tournaments
@@ -28,6 +34,11 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         val tournamentDatabase = AppDatabase.getDatabase(application).TournamentsDao()
         repository = TournamentsRepository(tournamentDatabase)
 
+        val singleMatchDatabase = AppDatabase.getDatabase(application).SingleMatchDao()
+        singleMatchRepository = SingleMatchRepository(singleMatchDatabase)
+
+        val playerStatsDatabase = AppDatabase.getDatabase(application).PlayerStatsDao()
+        playerStatsRepository = PlayerStatsRepository(playerStatsDatabase)
 
         viewModelScope.launch {
             delay(3000)
@@ -42,6 +53,5 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
 
     }
-
 
 }

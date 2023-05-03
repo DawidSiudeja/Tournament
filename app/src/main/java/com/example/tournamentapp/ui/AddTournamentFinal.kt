@@ -59,7 +59,7 @@ fun AddTournamentFinal(
                 modifier = Modifier
                     .padding(bottom = 10.dp)
             )
-            Steps(1, navController)
+            Steps(1)
             var players = FormPlayers(
                 modifier = Modifier
                     .fillMaxHeight(1f)

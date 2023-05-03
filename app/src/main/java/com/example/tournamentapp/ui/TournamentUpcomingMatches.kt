@@ -21,9 +21,14 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -57,6 +62,7 @@ import com.example.tournamentapp.ui.theme.lightBlueGradient
 import com.example.tournamentapp.ui.theme.lightGradient
 import com.example.tournamentapp.ui.theme.redColor
 import com.example.tournamentapp.ui.theme.textColor
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -92,27 +98,33 @@ fun TournamentUpcomingMatches(
         Column() {
             ImageTrophy(navController = navController)
 
-            Text(
-                text = tournament!!.title,
-                fontSize = 22.sp,
-                color = textColor,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(bottom = 10.dp)
-            )
+            if (tournament != null) {
+                Text(
+                    text = tournament.title,
+                    fontSize = 22.sp,
+                    color = textColor,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                )
+            }
             StepsMTR(0, navController, tournamentId)
-            ListOfMatches(
-                upcomingMatches = upcomingMatches,
-                modifier = Modifier,
-                viewModel = viewModel,
-                tournament = tournament
-            )
+            if (tournament != null) {
+                ListOfMatches(
+                    upcomingMatches = upcomingMatches,
+                    modifier = Modifier,
+                    viewModel = viewModel,
+                    tournament = tournament
+                )
+            }
             BottomMenu(
                 tournamentOption = "END TOURNAMENT",
                 deleteButton = true,
                 deleteTournament = {
                     scope.launch {
-                        viewModel.deleteTournament(tournament)
+                        if (tournament != null) {
+                            viewModel.deleteTournament(tournament)
+                        }
                     }
                     navigate(navController, Screen.MainScreen)
                 },
@@ -176,7 +188,11 @@ fun ListOfMatches(
                             .width(50.dp)
                             .aspectRatio(1f)
                             .padding(end = 2.5.dp)
-                            .border(width = 2.dp, color = textColor, shape = RoundedCornerShape(10.dp)),
+                            .border(
+                                width = 2.dp,
+                                color = textColor,
+                                shape = RoundedCornerShape(10.dp)
+                            ),
 
                         colors = TextFieldDefaults.textFieldColors(
                             textColor = textColor,
@@ -197,35 +213,44 @@ fun ListOfMatches(
                             .width(50.dp)
                             .aspectRatio(1f)
                             .padding(start = 2.5.dp)
-                            .border(width = 2.dp, color = textColor, shape = RoundedCornerShape(10.dp))
+                            .border(
+                                width = 2.dp,
+                                color = textColor,
+                                shape = RoundedCornerShape(10.dp)
+                            )
                         ,
                         colors = TextFieldDefaults.textFieldColors(
                             textColor = textColor,
                             containerColor = Color.Transparent,
                         ),
                     )
-                    Button(
-                        onClick = {
-                            viewModel.setScoreOfMatch(
+
+
+
+                    Box(
+                        modifier = Modifier
+                            .padding(vertical = 0.dp)
+                            .clip(RoundedCornerShape(100))
+                    ) {
+                        IconButton(
+                            onClick = { viewModel.setScoreOfMatch(
                                 player1 = upcomingMatches[it].player1,
                                 player2 = upcomingMatches[it].player2,
                                 player1Score = playersScore1[it],
                                 player2Score = playersScore2[it],
                                 matchId = upcomingMatches[it].matchId,
-                                tournament = tournament
-                            )
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = goldColor
-                        ),
-                        modifier = Modifier
-                            .width(50.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_done),
-                            contentDescription = "Set Score",
+                                tournament = tournament) },
+                            content = {
+                                Icon(
+                                    painterResource(id = R.drawable.ic_done),
+                                    contentDescription = "set score",
+                                    tint = textColor
+                                )
+                            }
                         )
                     }
+
+
                 }
             }
         }

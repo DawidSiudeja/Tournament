@@ -70,14 +70,16 @@ fun TournamentTable(
         Column() {
             ImageTrophy(navController = navController)
 
-            Text(
-                text = tournament!!.title,
-                fontSize = 22.sp,
-                color = textColor,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(bottom = 10.dp)
-            )
+            if (tournament != null) {
+                Text(
+                    text = tournament.title,
+                    fontSize = 22.sp,
+                    color = textColor,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                )
+            }
 
             StepsMTR(activeStep = 1, navController = navController, tournamentId = tournamentId)
             tablePlayerStats(
@@ -88,13 +90,12 @@ fun TournamentTable(
                 tournamentOption = "END TOURNAMENT",
                 deleteButton = true,
                 deleteTournament = {
-                    navigate(navController, Screen.MainScreen)
-
                     scope.launch {
-                        delay(500)
-                        viewModel.deleteTournament(tournament)
+                        if (tournament != null) {
+                            viewModel.deleteTournament(tournament)
+                        }
                     }
-
+                    navigate(navController, Screen.MainScreen)
                 },
                 action = { navigate(navController, Screen.MainScreen) },
             )
@@ -127,7 +128,7 @@ fun tablePlayerStats(
             Text(text = "W", color = textColor)
             Text(text = "L", color = textColor)
             Text(text = "D", color = textColor)
-            Text(text = "P", color = textColor)
+            Text(text = "P", color = textColor, fontWeight = FontWeight.Bold)
         }
     }
 
@@ -160,7 +161,7 @@ fun tablePlayerStats(
                     Text(text = playerStats[it].won.toString(), color = textColor)
                     Text(text = playerStats[it].lost.toString(), color = textColor)
                     Text(text = playerStats[it].draws.toString(), color = textColor)
-                    Text(text = points.toString(), color = textColor)
+                    Text(text = points.toString(), color = textColor, fontWeight = FontWeight.Bold,)
                 }
             }
         }

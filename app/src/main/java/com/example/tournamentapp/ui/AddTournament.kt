@@ -1,5 +1,6 @@
 package com.example.tournamentapp.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,9 @@ import com.example.tournamentapp.ui.theme.*
 
 @Composable
 fun AddTournament(navController: NavController) {
+
+
+
     Box(
         modifier = Modifier
             .background(darkGradient)
@@ -50,33 +54,31 @@ fun AddTournament(navController: NavController) {
                 modifier = Modifier
                     .padding(bottom = 10.dp)
             )
-            Steps(0, navController)
+            Steps(0)
             var basicInfoList = FormBasicInfo()
             Spacer(modifier = Modifier.fillMaxHeight(.7f))
 
             BottomMenu(
                 tournamentOption = "NEXT STEP",
                 deleteButton = false,
-                action = { navigate(
-                    navController = navController,
-                    destination = Screen.AddTournamentFinal,
-                    arguments = basicInfoList
-                ) }
+                action = {
+                    if(basicInfoList[0] != "") {
+                        navigate(
+                            navController = navController,
+                            destination = Screen.AddTournamentFinal,
+                            arguments = basicInfoList
+                        )
+                    }
+                }
             )
         }
     }
 }
 
-/*
-fun navigateForm(navController: NavController, destination: Screen, arguments: List<String>) {
-    navController.navigate(destination.route+"/" + arguments[0] + "/" + arguments[1])
-}
-*/
 
 @Composable
 fun Steps(
     activeStep: Int,
-    navController: NavController
 ) {
     Row(
         modifier = Modifier
@@ -87,13 +89,7 @@ fun Steps(
             text = "Basic Info",
             color = textColor,
             modifier = Modifier
-                .padding(end = 10.dp)
-                .clickable {
-                    navigate(
-                        navController = navController,
-                        destination = Screen.AddTournament
-                    )
-                },
+                .padding(end = 10.dp),
             fontWeight = if (activeStep == 0) {
                 FontWeight.Bold
             } else {
@@ -105,13 +101,7 @@ fun Steps(
             text = "Players",
             color = textColor,
             modifier = Modifier
-                .padding(end = 10.dp)
-                .clickable {
-                    navigate(
-                        navController = navController,
-                        destination = Screen.AddTournamentFinal
-                    )
-                },
+                .padding(end = 10.dp),
             fontWeight = if (activeStep == 1) {
                 FontWeight.Bold
             } else {
