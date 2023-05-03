@@ -14,7 +14,7 @@ interface TournamentsDao {
     fun upsertTournament(tournament: Tournament): Long
 
     @Delete
-    suspend fun deleteTournament(tournament: Tournament)
+    fun deleteTournament(tournament: Tournament)
 
     @Query("SELECT * FROM tournament_table")
     fun getAllTournaments(): Flow<List<Tournament>>

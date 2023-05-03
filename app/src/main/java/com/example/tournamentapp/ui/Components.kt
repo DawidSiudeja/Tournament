@@ -3,8 +3,10 @@ package com.example.tournamentapp.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.lifecycle.lifecycleScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +26,7 @@ import androidx.navigation.NavController
 import com.example.tournamentapp.R
 import com.example.tournamentapp.navigation.Screen
 import com.example.tournamentapp.ui.theme.goldColor
+import com.example.tournamentapp.ui.theme.redColor
 import com.example.tournamentapp.ui.theme.textColor
 
 
@@ -67,18 +70,22 @@ fun navigate(navController: NavController, destination: Screen, arguments: List<
 fun BottomMenu(
     tournamentOption: String,
     modifier: Modifier = Modifier,
-    action: () -> Unit
+    action: () -> Unit,
+    deleteTournament: () -> Unit = {},
+    deleteButton: Boolean
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Transparent)
-            .height(80.dp)
+            .height(80.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Button(
             onClick = { action() },
             modifier = Modifier
                 .fillMaxSize()
+                .weight(1f)
                 .padding(vertical = 16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = goldColor)
         ) {
@@ -89,6 +96,24 @@ fun BottomMenu(
                 fontWeight = FontWeight.Bold,
             )
         }
+        if(deleteButton) {
+            Button(
+                onClick = {
 
+                    deleteTournament()
+
+                },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(.2f)
+                    .padding(vertical = 16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = redColor)
+            ) {
+                Text(
+                    text = "X",
+                    color = textColor
+                )
+            }
+        }
     }
 }

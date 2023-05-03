@@ -52,6 +52,7 @@ fun HomeScreen(
             )
             BottomMenu(
                 tournamentOption = "NEW TOURNAMENT",
+                deleteButton = false,
                 action = { navigate(navController,Screen.AddTournament) }
             )
         }

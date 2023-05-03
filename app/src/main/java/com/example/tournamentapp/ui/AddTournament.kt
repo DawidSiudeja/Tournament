@@ -56,6 +56,7 @@ fun AddTournament(navController: NavController) {
 
             BottomMenu(
                 tournamentOption = "NEXT STEP",
+                deleteButton = false,
                 action = { navigate(
                     navController = navController,
                     destination = Screen.AddTournamentFinal,

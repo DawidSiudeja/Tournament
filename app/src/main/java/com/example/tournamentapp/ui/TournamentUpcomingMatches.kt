@@ -32,6 +32,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,6 +57,8 @@ import com.example.tournamentapp.ui.theme.lightBlueGradient
 import com.example.tournamentapp.ui.theme.lightGradient
 import com.example.tournamentapp.ui.theme.redColor
 import com.example.tournamentapp.ui.theme.textColor
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,6 +81,7 @@ fun TournamentUpcomingMatches(
     val upcomingMatches = viewModel.getSpecifMatches(tournamentId.toInt())
         .collectAsState(emptyList()).value
 
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -103,9 +107,17 @@ fun TournamentUpcomingMatches(
                 viewModel = viewModel,
                 tournament = tournament
             )
-            BottomMenu(tournamentOption = "END TOURNAMENT") {
-                navigate(navController, Screen.MainScreen)
-            }
+            BottomMenu(
+                tournamentOption = "END TOURNAMENT",
+                deleteButton = true,
+                deleteTournament = {
+                    scope.launch {
+                        viewModel.deleteTournament(tournament)
+                    }
+                    navigate(navController, Screen.MainScreen)
+                },
+                action = { navigate(navController, Screen.MainScreen) },
+            )
         }
     }
 

@@ -2,7 +2,6 @@ package com.example.tournamentapp
 
 import android.app.Application
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tournamentapp.database.AppDatabase
@@ -16,11 +15,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 import kotlin.math.absoluteValue
 
@@ -171,9 +172,64 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
 
 
 
-    fun makeEditableScoreMatch(matchId: Int) {
+    fun makeEditableScoreMatch(matchId: Int,
+                               player1: String,
+                               player2: String,
+                               player1Score: Int,
+                               player2Score: Int,
+                               tournamentId: Int) {
         viewModelScope.launch {
             singleMatchRepository.matchIsFinished(false, matchId)
+
+            val playerList = playerStatsRepository.getAllPlayerStats(tournamentId).first()
+
+            // Draw
+            if (player1Score == player2Score) {
+
+                for(player in playerList) {
+                    if (player.playerName == player1) {
+                        playerStatsRepository.decreaseDraw(player.playerId)
+                    }
+                    if (player.playerName == player2) {
+                        playerStatsRepository.decreaseDraw(player.playerId)
+                    }
+                }
+            }
+
+            // WIN PLAYER 1
+            if(player1Score > player2Score) {
+                for (player in playerList) {
+                    if (player.playerName == player1) {
+                        playerStatsRepository.decreaseWin(player.playerId)
+                    }
+                    if (player.playerName == player2) {
+                        playerStatsRepository.decreaseLose(player.playerId)
+                    }
+                }
+            }
+
+            // WIN PLAYER 2
+            if(player2Score > player1Score) {
+                for (player in playerList) {
+                    if (player.playerName == player2) {
+                        playerStatsRepository.decreaseWin(player.playerId)
+                    }
+                    if (player.playerName == player1) {
+                        playerStatsRepository.decreaseLose(player.playerId)
+                    }
+                }
+            }
         }
     }
+
+    fun getPlayerStats(tournamentId: Int): Flow<List<PlayerStats>> {
+        return playerStatsRepository.getAllPlayerStats(tournamentId)
+    }
+
+    suspend fun deleteTournament(tournament: Tournament) = withContext(Dispatchers.IO) {
+        repository.deleteTournament(tournament)
+        singleMatchRepository.deleteAllMatchesFromTournament(tournament.id)
+        playerStatsRepository.deleteAllPlayerStatsFromTournament(tournament.id)
+    }
+
 }

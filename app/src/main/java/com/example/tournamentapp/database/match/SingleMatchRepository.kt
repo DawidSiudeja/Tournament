@@ -8,7 +8,7 @@ class SingleMatchRepository(private val singleMatchDao: SingleMatchDao) {
     fun getAllMatches(tournamentId: Int)
         = singleMatchDao.getAllMatches(tournamentId)
 
-    suspend fun deleteAllMatchesFromTournament(tournamentId: Int)
+    fun deleteAllMatchesFromTournament(tournamentId: Int)
         = singleMatchDao.deleteAllMatchesFromTournament(tournamentId)
 
     suspend fun updatePlayer1Score(player1Score: String, matchId: Int)

@@ -66,6 +66,7 @@ fun AddTournamentFinal(
             )
             BottomMenu(
                 tournamentOption = "START TOURNAMENT",
+                deleteButton = false,
                 action = {
                     viewModel.addTournament(
                         Tournament(

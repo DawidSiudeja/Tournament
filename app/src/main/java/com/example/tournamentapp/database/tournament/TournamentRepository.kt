@@ -5,7 +5,7 @@ class TournamentsRepository(private val tournamentsDao: TournamentsDao) {
     suspend fun insertTournament(tournament: Tournament) =
         tournamentsDao.upsertTournament(tournament)
 
-    suspend fun deleteTournament(tournament: Tournament) =
+    fun deleteTournament(tournament: Tournament) =
         tournamentsDao.deleteTournament(tournament)
 
     suspend fun deleteAllTournaments() =

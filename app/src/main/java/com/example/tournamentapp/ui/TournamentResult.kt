@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,10 +45,13 @@ import com.example.tournamentapp.R
 import com.example.tournamentapp.TournamentViewModel
 import com.example.tournamentapp.database.match.SingleMatch
 import com.example.tournamentapp.database.tournament.Tournament
+import com.example.tournamentapp.navigation.Screen
 import com.example.tournamentapp.ui.theme.darkGradient
 import com.example.tournamentapp.ui.theme.goldColor
 import com.example.tournamentapp.ui.theme.lightGradient
 import com.example.tournamentapp.ui.theme.textColor
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun TournamentResult(
@@ -68,6 +72,8 @@ fun TournamentResult(
 
     val results = viewModel.getSpecifMatches(tournamentId.toInt())
         .collectAsState(emptyList()).value
+
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -92,7 +98,22 @@ fun TournamentResult(
             ListOfResults(
                 results = results.reversed(),
                 modifier = Modifier,
-                viewModel = viewModel
+                viewModel = viewModel,
+                tournamentId = tournamentId.toInt()
+            )
+            BottomMenu(
+                tournamentOption = "END TOURNAMENT",
+                deleteButton = true,
+                deleteTournament = {
+                    navigate(navController, Screen.MainScreen)
+
+                    scope.launch {
+                        delay(500)
+                        viewModel.deleteTournament(tournament)
+                    }
+
+                },
+                action = { navigate(navController, Screen.MainScreen) },
             )
         }
     }
@@ -109,7 +130,8 @@ fun TournamentResult(
 fun ListOfResults(
     results: List<SingleMatch>,
     modifier: Modifier,
-    viewModel: TournamentViewModel
+    viewModel: TournamentViewModel,
+    tournamentId: Int
 ) {
 
 
@@ -142,7 +164,14 @@ fun ListOfResults(
                     )
                     Button(
                         onClick = {
-                                  viewModel.makeEditableScoreMatch(results[it].matchId)
+                                  viewModel.makeEditableScoreMatch(
+                                      results[it].matchId,
+                                      results[it].player1,
+                                      results[it].player2,
+                                      results[it].player1Score,
+                                      results[it].player2Score,
+                                      tournamentId = tournamentId
+                                  )
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = goldColor

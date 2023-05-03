@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tournamentapp.database.AppDatabase
+import com.example.tournamentapp.database.match.SingleMatchRepository
+import com.example.tournamentapp.database.points.PlayerStatsRepository
 import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.database.tournament.TournamentsRepository
 import kotlinx.coroutines.delay
@@ -26,6 +28,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         val tournamentDatabase = AppDatabase.getDatabase(application).TournamentsDao()
         repository = TournamentsRepository(tournamentDatabase)
 
+
         viewModelScope.launch {
             delay(3000)
             _isLoading.value = false
@@ -39,4 +42,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
 
     }
+
+
 }

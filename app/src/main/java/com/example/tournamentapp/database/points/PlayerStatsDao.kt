@@ -22,8 +22,17 @@ interface PlayerStatsDao {
     @Query("UPDATE player_points_table SET draws = draws + 1 WHERE playerId = :playerId")
     suspend fun increaseDraw(playerId: Int)
 
+    @Query("UPDATE player_points_table SET won = won - 1 WHERE playerId = :playerId")
+    suspend fun decreaseWin(playerId: Int)
+
+    @Query("UPDATE player_points_table SET lost = lost - 1 WHERE playerId = :playerId")
+    suspend fun decreaseLose(playerId: Int)
+
+    @Query("UPDATE player_points_table SET draws = draws - 1 WHERE playerId = :playerId")
+    suspend fun decreaseDraw(playerId: Int)
+
     @Query("DELETE FROM player_points_table WHERE tournamentId = :tournamentId")
-    suspend fun deleteAllPlayerStatsFromTournament(tournamentId: Int)
+    fun deleteAllPlayerStatsFromTournament(tournamentId: Int)
 
     @Query("SELECT * FROM player_points_table WHERE tournamentId = :tournamentId")
     fun getAllPlayerStats(tournamentId: Int): Flow<List<PlayerStats>>
