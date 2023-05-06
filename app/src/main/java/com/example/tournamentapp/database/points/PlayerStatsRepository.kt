@@ -26,6 +26,18 @@ class PlayerStatsRepository(private val playerStatsDao: PlayerStatsDao) {
     fun deleteAllPlayerStatsFromTournament(tournamentId: Int)
         = playerStatsDao.deleteAllPlayerStatsFromTournament(tournamentId)
 
+    suspend fun increaseDrawPoints(playerId: Int)
+            = playerStatsDao.increaseDrawPoints(playerId)
+
+    suspend fun increaseWinPoints(playerId: Int)
+            = playerStatsDao.increaseWinPoints(playerId)
+
+    suspend fun decreaseDrawPoints(playerId: Int)
+            = playerStatsDao.decreaseDrawPoints(playerId)
+
+    suspend fun decreaseWinPoints(playerId: Int)
+            = playerStatsDao.decreaseWinPoints(playerId)
+
     fun getAllPlayerStats(tournamentId: Int)
         = playerStatsDao.getAllPlayerStats(tournamentId)
 

@@ -134,9 +134,11 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
                     Log.d("DRAW PLAYER", player.playerName + " " + player2)
                     if (player.playerName == player1) {
                         playerStatsRepository.increaseDraw(player.playerId)
+                        playerStatsRepository.increaseDrawPoints(player.playerId)
                     }
                     if (player.playerName == player2) {
                         playerStatsRepository.increaseDraw(player.playerId)
+                        playerStatsRepository.increaseDrawPoints(player.playerId)
                     }
                 }
             }
@@ -146,6 +148,7 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
                 for (player in playerList) {
                     if (player.playerName == player1) {
                         playerStatsRepository.increaseWin(player.playerId)
+                        playerStatsRepository.increaseWinPoints(player.playerId)
                     }
                     if (player.playerName == player2) {
                         playerStatsRepository.increaseLose(player.playerId)
@@ -158,6 +161,7 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
                  for (player in playerList) {
                      if (player.playerName == player2) {
                          playerStatsRepository.increaseWin(player.playerId)
+                         playerStatsRepository.increaseWinPoints(player.playerId)
                      }
                      if (player.playerName == player1) {
                          playerStatsRepository.increaseLose(player.playerId)
@@ -189,9 +193,11 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
                 for(player in playerList) {
                     if (player.playerName == player1) {
                         playerStatsRepository.decreaseDraw(player.playerId)
+                        playerStatsRepository.decreaseDrawPoints(player.playerId)
                     }
                     if (player.playerName == player2) {
                         playerStatsRepository.decreaseDraw(player.playerId)
+                        playerStatsRepository.decreaseDrawPoints(player.playerId)
                     }
                 }
             }
@@ -201,6 +207,7 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
                 for (player in playerList) {
                     if (player.playerName == player1) {
                         playerStatsRepository.decreaseWin(player.playerId)
+                        playerStatsRepository.decreaseWinPoints(player.playerId)
                     }
                     if (player.playerName == player2) {
                         playerStatsRepository.decreaseLose(player.playerId)
@@ -213,6 +220,7 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
                 for (player in playerList) {
                     if (player.playerName == player2) {
                         playerStatsRepository.decreaseWin(player.playerId)
+                        playerStatsRepository.decreaseWinPoints(player.playerId)
                     }
                     if (player.playerName == player1) {
                         playerStatsRepository.decreaseLose(player.playerId)
@@ -230,6 +238,10 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
         repository.deleteTournament(tournament)
         singleMatchRepository.deleteAllMatchesFromTournament(tournament.id)
         playerStatsRepository.deleteAllPlayerStatsFromTournament(tournament.id)
+    }
+
+    fun setWinner(tournamentId: Int) {
+        TODO()
     }
 
 }

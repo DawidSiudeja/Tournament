@@ -41,7 +41,7 @@ fun HomeScreen(
     viewModel: MainViewModel
 ) {
 
-    val tournaments =  viewModel.tournaments.collectAsState().value
+    val tournaments =  viewModel.tournaments.collectAsState().value.reversed()
 
 
     Box(

@@ -121,6 +121,7 @@ fun TournamentUpcomingMatches(
                 tournamentOption = "END TOURNAMENT",
                 deleteButton = true,
                 deleteTournament = {
+
                     scope.launch {
                         if (tournament != null) {
                             viewModel.deleteTournament(tournament)

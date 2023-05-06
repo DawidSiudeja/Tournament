@@ -161,7 +161,7 @@ fun tablePlayerStats(
                     Text(text = playerStats[it].won.toString(), color = textColor)
                     Text(text = playerStats[it].lost.toString(), color = textColor)
                     Text(text = playerStats[it].draws.toString(), color = textColor)
-                    Text(text = points.toString(), color = textColor, fontWeight = FontWeight.Bold,)
+                    Text(text = playerStats[it].points.toString(), color = textColor, fontWeight = FontWeight.Bold,)
                 }
             }
         }

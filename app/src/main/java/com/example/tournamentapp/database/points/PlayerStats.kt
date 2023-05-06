@@ -22,6 +22,9 @@ data class PlayerStats(
     val draws: Int = 0,
 
     @ColumnInfo
+    val points: Int = 0,
+
+    @ColumnInfo
     val tournamentId: Long,
 
 )

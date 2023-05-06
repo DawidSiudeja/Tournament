@@ -23,7 +23,7 @@ val lightBlueGradient = Color(0xFF6172DB)
 val darkBlueGradient = Color(0xFF2D3A88)
 
 val textColor = Color(0xFFEEEEEE)
-val redColor = Color(0xFFFF2E00)
+val redColor = Color(0xFFE64413)
 val goldColor = Color(0xFFE8A715)
 
 val darkGradient = Brush.radialGradient(

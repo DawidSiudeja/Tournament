@@ -120,7 +120,10 @@ fun TournamentResult(
                     }
                     navigate(navController, Screen.MainScreen)
                 },
-                action = { navigate(navController, Screen.MainScreen) },
+                action = {
+                    viewModel.setWinner(tournamentId.toInt())
+                    navigate(navController, Screen.MainScreen)
+                },
             )
         }
     }
@@ -154,6 +157,9 @@ fun ListOfResults(
         items(results.size) {
 
             if (results[it].isFinished) {
+
+                var showDialog by remember { mutableStateOf(false) }
+
                 Row(
                     modifier = Modifier
                         .padding(bottom = 15.dp),
@@ -176,13 +182,7 @@ fun ListOfResults(
                             .clip(RoundedCornerShape(100))
                     ) {
                         IconButton(
-                            onClick = { viewModel.makeEditableScoreMatch(
-                                results[it].matchId,
-                                results[it].player1,
-                                results[it].player2,
-                                results[it].player1Score,
-                                results[it].player2Score,
-                                tournamentId = tournamentId) },
+                            onClick = { showDialog = true },
                             content = {
                                 Icon(
                                     Icons.Filled.Refresh,
@@ -193,6 +193,23 @@ fun ListOfResults(
                         )
                     }
                 }
+
+                if(showDialog) {
+                    AlertTournament(
+                        onConfirm = {
+                            viewModel.makeEditableScoreMatch(
+                                results[it].matchId,
+                                results[it].player1,
+                                results[it].player2,
+                                results[it].player1Score,
+                                results[it].player2Score,
+                                tournamentId = tournamentId)
+                        },
+                        onDismiss = { showDialog = false },
+                        reset = true
+                    )
+                }
+
             }
         }
 

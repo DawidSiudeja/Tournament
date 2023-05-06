@@ -1,5 +1,6 @@
 package com.example.tournamentapp.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.*
 import com.example.tournamentapp.TournamentViewModel
 import com.example.tournamentapp.database.tournament.Tournament
@@ -50,6 +52,9 @@ fun AddTournamentFinal(
             .padding(20.dp),
     ) {
         Column() {
+
+            val context = LocalContext.current
+
             ImageTrophy(navController = navController)
             Text(
                 text = "Add Tournament",
@@ -68,13 +73,19 @@ fun AddTournamentFinal(
                 tournamentOption = "START TOURNAMENT",
                 deleteButton = false,
                 action = {
-                    viewModel.addTournament(
-                        Tournament(
-                        title = basicInfoList[0],
-                        gameType= basicInfoList[1],
-                        players = players.toString())
-                    )
-                    navigate(navController, Screen.MainScreen)
+
+                    if(players.size >= 2) {
+                        viewModel.addTournament(
+                            Tournament(
+                                title = basicInfoList[0],
+                                gameType= basicInfoList[1],
+                                players = players.toString())
+                        )
+                        navigate(navController, Screen.MainScreen)
+                    } else {
+                        Toast.makeText(context, "Enter at least 2 players", Toast.LENGTH_SHORT).show()
+                    }
+
                 }
             )
         }

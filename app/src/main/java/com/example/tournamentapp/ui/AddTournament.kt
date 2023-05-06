@@ -1,8 +1,7 @@
 package com.example.tournamentapp.ui
 
-import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,12 +22,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import androidx.navigation.NavOptionsBuilder
 import com.example.tournamentapp.navigation.Screen
 import com.example.tournamentapp.ui.theme.*
 
@@ -45,6 +43,9 @@ fun AddTournament(navController: NavController) {
             .padding(20.dp),
     ) {
         Column() {
+
+            val context = LocalContext.current
+
             ImageTrophy(navController = navController)
             Text(
                 text = "Add Tournament",
@@ -68,9 +69,12 @@ fun AddTournament(navController: NavController) {
                             destination = Screen.AddTournamentFinal,
                             arguments = basicInfoList
                         )
+                    } else {
+                        Toast.makeText(context, "Enter the name of the tournament", Toast.LENGTH_SHORT).show()
                     }
                 }
             )
+
         }
     }
 }
@@ -164,7 +168,8 @@ fun FormBasicInfo(): List<String> {
                         unselectedColor = textColor,
                         disabledSelectedColor = textColor,
                         disabledUnselectedColor = textColor,
-                    )
+                    ),
+                    enabled = text == "FFA",
                 )
                 Text(
                     text = text,
@@ -175,7 +180,6 @@ fun FormBasicInfo(): List<String> {
             }
         }
     }
-    var basicInfoList = listOf(textStateName.value, selectedOption.value)
-    return basicInfoList
+    return listOf(textStateName.value, selectedOption.value)
 
 }
