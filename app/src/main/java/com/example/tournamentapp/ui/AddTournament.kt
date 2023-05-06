@@ -57,7 +57,7 @@ fun AddTournament(navController: NavController) {
             )
             Steps(0)
             var basicInfoList = FormBasicInfo()
-            Spacer(modifier = Modifier.fillMaxHeight(.7f))
+            Spacer(modifier = Modifier.weight(1f))
 
             BottomMenu(
                 tournamentOption = "NEXT STEP",

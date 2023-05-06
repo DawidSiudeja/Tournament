@@ -2,6 +2,7 @@ package com.example.tournamentapp
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tournamentapp.database.AppDatabase
@@ -15,10 +16,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -240,8 +243,15 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
         playerStatsRepository.deleteAllPlayerStatsFromTournament(tournament.id)
     }
 
-    fun setWinner(tournamentId: Int) {
-        TODO()
+    fun getWinner(tournamentId: Int): Flow<List<PlayerStats>> {
+        return playerStatsRepository.getPlayerWithTheMostPoints(tournamentId)
+    }
+
+    suspend fun setWinner(player: PlayerStats, tournamentId: Int) {
+        repository.setTournamentWinner(player.playerName, tournamentId)
+    }
+    fun getSpecifyPlayer(playerId: Int): Flow<PlayerStats> {
+        return playerStatsRepository.getSpecifPlayerStats(playerId)
     }
 
 }

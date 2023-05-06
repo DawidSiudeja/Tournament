@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -109,6 +110,7 @@ fun TournamentResult(
                 viewModel = viewModel,
                 tournamentId = tournamentId.toInt()
             )
+            Spacer(modifier = Modifier.weight(1f))
             BottomMenu(
                 tournamentOption = "END TOURNAMENT",
                 deleteButton = true,
@@ -121,7 +123,6 @@ fun TournamentResult(
                     navigate(navController, Screen.MainScreen)
                 },
                 action = {
-                    viewModel.setWinner(tournamentId.toInt())
                     navigate(navController, Screen.MainScreen)
                 },
             )
@@ -149,7 +150,7 @@ fun ListOfResults(
         columns = GridCells.Fixed(1),
         contentPadding = PaddingValues(start = 0.dp, top = 10.dp, end = 0.dp, bottom = 10.dp),
         modifier = Modifier
-            .fillMaxHeight(.85f)
+            .fillMaxHeight(.75f)
             .clip(RoundedCornerShape(10.dp))
             .background(brush = lightGradient)
             .padding(horizontal = 16.dp)

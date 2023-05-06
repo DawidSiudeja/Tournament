@@ -7,4 +7,5 @@ sealed class Screen(val route: String) {
     object TournamentUpcomingMatches: Screen("tournament_upcoming_matches")
     object TournamentTable: Screen("tournament_table")
     object TournamentResult: Screen("tournament_result")
+    object WinnerView: Screen("winner_view")
 }

@@ -13,6 +13,7 @@ import com.example.tournamentapp.ui.AddTournamentFinal
 import com.example.tournamentapp.ui.TournamentResult
 import com.example.tournamentapp.ui.TournamentTable
 import com.example.tournamentapp.ui.TournamentUpcomingMatches
+import com.example.tournamentapp.ui.WinnerView
 import com.example.tournamentapp.ui.theme.HomeScreen
 
 @Composable
@@ -107,6 +108,33 @@ fun Navigation() {
             TournamentResult(
                 tournamentId = tournamentId,
                 navController = navController,
+                viewModel = viewModel()
+            )
+        }
+
+        composable(route = Screen.WinnerView.route +
+                "/{playerId}/{tournamentId}",
+            arguments = listOf(navArgument(
+                name = "playerId"
+            ){
+                type = NavType.StringType
+                defaultValue = ""
+            },
+            navArgument(
+                name = "tournamentId"
+            ) {
+                type = NavType.StringType
+                defaultValue = ""
+            })
+        ) { backStackEntry ->
+
+            val playerId = requireNotNull(backStackEntry.arguments).getString("playerId").toString()
+            val tournamentId = requireNotNull(backStackEntry.arguments).getString("tournamentId").toString()
+
+            WinnerView(
+                navController = navController,
+                playerId = playerId,
+                tournamentId = tournamentId,
                 viewModel = viewModel()
             )
         }

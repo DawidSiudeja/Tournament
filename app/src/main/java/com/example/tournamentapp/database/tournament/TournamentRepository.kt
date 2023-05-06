@@ -16,4 +16,7 @@ class TournamentsRepository(private val tournamentsDao: TournamentsDao) {
 
     fun getSpecifTournament(tournamentId: Int) =
         tournamentsDao.getSpecifTournament(tournamentId)
+
+    suspend fun setTournamentWinner(winner: String, tournamentId: Int) =
+        tournamentsDao.setTournamentWinner(winner, tournamentId)
 }

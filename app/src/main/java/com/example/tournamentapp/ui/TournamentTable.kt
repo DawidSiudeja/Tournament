@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,6 +60,9 @@ fun TournamentTable(
     val playerStats = viewModel.getPlayerStats(tournamentId.toInt())
         .collectAsState(emptyList()).value
 
+    var winner = viewModel.getWinner(tournamentId.toInt())
+        .collectAsState(emptyList()).value
+
     val scope = rememberCoroutineScope()
 
     Box(
@@ -86,6 +90,7 @@ fun TournamentTable(
                 playerStats = playerStats,
                 modifier = Modifier
             )
+            Spacer(modifier = Modifier.weight(1f))
             BottomMenu(
                 tournamentOption = "END TOURNAMENT",
                 deleteButton = true,
@@ -97,7 +102,15 @@ fun TournamentTable(
                     }
                     navigate(navController, Screen.MainScreen)
                 },
-                action = { navigate(navController, Screen.MainScreen) },
+                action = {
+                    viewModel.getWinner(tournamentId.toInt())
+                    if (winner.size == 1) {
+                        navigate(navController, Screen.WinnerView, arguments = listOf(winner[0].playerId,tournamentId))
+                    }
+                    if (winner.size > 1) {
+                        TODO()
+                    }
+                },
             )
         }
     }
@@ -140,7 +153,7 @@ fun tablePlayerStats(
             .background(brush = lightGradient)
             .padding(horizontal = 20.dp)
             .fillMaxWidth()
-            .fillMaxHeight(.85f)
+            .fillMaxHeight(.73f)
     ) {
         items(playerStats.size) {
             var points = playerStats[it].won * 3 + playerStats[it].draws

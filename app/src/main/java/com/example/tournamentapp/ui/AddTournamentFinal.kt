@@ -16,8 +16,6 @@ import androidx.navigation.NavController
 import com.example.tournamentapp.navigation.Screen
 import com.example.tournamentapp.ui.theme.darkGradient
 import com.example.tournamentapp.ui.theme.textColor
-
-
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
@@ -65,10 +63,8 @@ fun AddTournamentFinal(
                     .padding(bottom = 10.dp)
             )
             Steps(1)
-            var players = FormPlayers(
-                modifier = Modifier
-                    .fillMaxHeight(1f)
-            )
+            var players = FormPlayers()
+            Spacer(modifier = Modifier.weight(1f))
             BottomMenu(
                 tournamentOption = "START TOURNAMENT",
                 deleteButton = false,
@@ -97,14 +93,14 @@ fun AddTournamentFinal(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormPlayers(
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ): List<String> {
     var players by remember { mutableStateOf(listOf("")) }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
         contentPadding = PaddingValues(start = 0.dp, top = 0.dp, end = 0.dp, bottom = 10.dp),
-        modifier = Modifier.fillMaxHeight(.83f),
+        modifier = Modifier.fillMaxHeight(.78f),
     ) {
         itemsIndexed(players) { index, player ->
             TextField(

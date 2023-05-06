@@ -1,6 +1,7 @@
 package com.example.tournamentapp.ui
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -89,6 +92,10 @@ fun TournamentUpcomingMatches(
 
     val scope = rememberCoroutineScope()
 
+
+    var winner = viewModel.getWinner(tournamentId.toInt())
+        .collectAsState(emptyList()).value
+
     Box(
         modifier = Modifier
             .background(darkGradient)
@@ -117,6 +124,7 @@ fun TournamentUpcomingMatches(
                     tournament = tournament
                 )
             }
+            Spacer(modifier = Modifier.weight(1f))
             BottomMenu(
                 tournamentOption = "END TOURNAMENT",
                 deleteButton = true,
@@ -129,7 +137,18 @@ fun TournamentUpcomingMatches(
                     }
                     navigate(navController, Screen.MainScreen)
                 },
-                action = { navigate(navController, Screen.MainScreen) },
+                action = {
+
+                    viewModel.getWinner(tournamentId.toInt())
+                    if (winner.size == 1) {
+                        navigate(navController, Screen.WinnerView, arguments = listOf(winner[0],tournamentId))
+                    }
+                    if (winner.size > 1) {
+                        TODO()
+                    }
+
+                },
+
             )
         }
     }
@@ -146,12 +165,11 @@ fun ListOfMatches(
     tournament: Tournament
 ) {
 
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
         contentPadding = PaddingValues(start = 0.dp, top = 10.dp, end = 0.dp, bottom = 10.dp),
         modifier = Modifier
-            .fillMaxHeight(.85f)
+            .fillMaxHeight(.75f)
             .clip(RoundedCornerShape(10.dp))
             .background(brush = lightGradient)
             .padding(horizontal = 16.dp)
@@ -234,13 +252,21 @@ fun ListOfMatches(
                             .clip(RoundedCornerShape(100))
                     ) {
                         IconButton(
-                            onClick = { viewModel.setScoreOfMatch(
-                                player1 = upcomingMatches[it].player1,
-                                player2 = upcomingMatches[it].player2,
-                                player1Score = playersScore1[it],
-                                player2Score = playersScore2[it],
-                                matchId = upcomingMatches[it].matchId,
-                                tournament = tournament) },
+                            onClick = {
+                                //if(playersScore1[it] == "" && playersScore2[it] == "") {
+                                    viewModel.setScoreOfMatch(
+                                        player1 = upcomingMatches[it].player1,
+                                        player2 = upcomingMatches[it].player2,
+                                        player1Score = playersScore1[it],
+                                        player2Score = playersScore2[it],
+                                        matchId = upcomingMatches[it].matchId,
+                                        tournament = tournament
+                                    )
+                                //} else {
+                                //    Toast.makeText(context, "Incorrect value", Toast.LENGTH_SHORT).show()
+                                //}
+
+                            },
                             content = {
                                 Icon(
                                     painterResource(id = R.drawable.ic_done),

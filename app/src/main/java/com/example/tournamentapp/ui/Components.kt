@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -92,56 +93,60 @@ fun BottomMenu(
     deleteTournament: () -> Unit = {},
     deleteButton: Boolean
 ) {
-
     var showDialog by remember { mutableStateOf(false) }
 
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Transparent)
-            .height(80.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Button(
-            onClick = { action() },
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
-                .padding(vertical = 16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = goldColor)
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .background(Color.Transparent),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = tournamentOption,
-                color = textColor,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-            )
-        }
-
-        if(deleteButton) {
-            Spacer(
-                modifier = Modifier.width(8.dp)
-            )
-            Box(
+            Button(
+                onClick = { action() },
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .clip(RoundedCornerShape(100))
-                    .background(redColor)
+                    .fillMaxSize()
+                    .weight(1f)
+                    .padding(vertical = 16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = goldColor)
             ) {
-                IconButton(
-                    onClick = { showDialog = true },
-                    content = {
-                        Icon(
-                            Icons.Filled.Delete,
-                            contentDescription = "Usuń",
-                            tint = textColor
-                        )
-                    }
+                Text(
+                    text = tournamentOption,
+                    color = textColor,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
                 )
+            }
+
+            if (deleteButton) {
+                Spacer(modifier = Modifier.width(8.dp))
+                Box(
+                    modifier = Modifier
+                        .padding(vertical = 16.dp)
+                        .clip(RoundedCornerShape(100))
+                        .background(redColor)
+                ) {
+                    IconButton(
+                        onClick = { showDialog = true },
+                        content = {
+                            Icon(
+                                Icons.Filled.Delete,
+                                contentDescription = "Usuń",
+                                tint = textColor
+                            )
+                        }
+                    )
+                }
             }
         }
     }
-    if(showDialog) {
+
+    if (showDialog) {
         AlertTournament(
             onConfirm = {
                 deleteTournament()

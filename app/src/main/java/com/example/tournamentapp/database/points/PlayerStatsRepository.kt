@@ -1,5 +1,7 @@
 package com.example.tournamentapp.database.points
 
+import kotlinx.coroutines.flow.Flow
+
 class PlayerStatsRepository(private val playerStatsDao: PlayerStatsDao) {
 
     suspend fun insertPlayerStats(playerStats: PlayerStats)
@@ -41,4 +43,9 @@ class PlayerStatsRepository(private val playerStatsDao: PlayerStatsDao) {
     fun getAllPlayerStats(tournamentId: Int)
         = playerStatsDao.getAllPlayerStats(tournamentId)
 
+    fun getPlayerWithTheMostPoints(tournamentId: Int)
+        = playerStatsDao.getPlayerWithTheMostPoints(tournamentId)
+
+    fun getSpecifPlayerStats(playerId: Int): Flow<PlayerStats>
+            = playerStatsDao.getSpecifPlayerStats(playerId)
 }

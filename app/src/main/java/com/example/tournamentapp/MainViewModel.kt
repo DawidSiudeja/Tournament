@@ -54,4 +54,10 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     }
 
+    suspend fun deleteTournament(tournament: Tournament) = withContext(Dispatchers.IO) {
+        repository.deleteTournament(tournament)
+        singleMatchRepository.deleteAllMatchesFromTournament(tournament.id)
+        playerStatsRepository.deleteAllPlayerStatsFromTournament(tournament.id)
+    }
+
 }

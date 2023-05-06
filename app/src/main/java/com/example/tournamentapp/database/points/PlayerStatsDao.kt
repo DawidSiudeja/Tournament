@@ -50,4 +50,10 @@ interface PlayerStatsDao {
     @Query("SELECT * FROM player_points_table WHERE tournamentId = :tournamentId ORDER BY points DESC")
     fun getAllPlayerStats(tournamentId: Int): Flow<List<PlayerStats>>
 
+    @Query("SELECT * FROM player_points_table WHERE tournamentId = :tournamentId AND points = (SELECT MAX(points) FROM player_points_table)")
+    fun getPlayerWithTheMostPoints(tournamentId: Int): Flow<List<PlayerStats>>
+
+    @Query("SELECT * FROM player_points_table WHERE playerId = :playerId")
+    fun getSpecifPlayerStats(playerId: Int): Flow<PlayerStats>
+
 }

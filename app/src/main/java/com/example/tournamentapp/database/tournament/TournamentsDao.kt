@@ -25,4 +25,7 @@ interface TournamentsDao {
     @Query("DELETE FROM tournament_table")
     suspend fun deleteAllTournaments()
 
+    @Query("UPDATE tournament_table SET winner = :winner, isFinished = 1 WHERE id = :tournamentId")
+    suspend fun setTournamentWinner(winner: String, tournamentId: Int)
+
 }

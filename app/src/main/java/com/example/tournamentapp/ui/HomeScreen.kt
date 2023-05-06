@@ -1,25 +1,28 @@
 package com.example.tournamentapp.ui.theme
 
 
-import androidx.compose.foundation.Image
+import android.widget.Toast
+
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +32,7 @@ import com.example.tournamentapp.MainViewModel
 import com.example.tournamentapp.R
 import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.navigation.Screen
+import com.example.tournamentapp.ui.AlertTournament
 import com.example.tournamentapp.ui.BottomMenu
 import com.example.tournamentapp.ui.ImageTrophy
 import com.example.tournamentapp.ui.navigate
@@ -50,18 +54,24 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(20.dp),
     ) {
-        Column() {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(1f),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
             ImageTrophy(navController = navController)
             LatestTournaments(
                 lightGradient = lightGradient,
                 tournaments = tournaments,
                 navController = navController,
-                viewModel = viewModel
+                viewModel = viewModel,
             )
+            Spacer(modifier = Modifier.weight(1f))
             BottomMenu(
                 tournamentOption = "NEW TOURNAMENT",
                 deleteButton = false,
-                action = { navigate(navController,Screen.AddTournament) }
+                action = { navigate(navController,Screen.AddTournament) },
+                modifier = Modifier
             )
         }
     }
@@ -74,7 +84,7 @@ fun LatestTournaments(
     tournaments: List<Tournament>,
     lightGradient: Brush,
     navController: NavController,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
 ) {
     Box(
         modifier = Modifier
@@ -92,7 +102,7 @@ fun LatestTournaments(
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(start = 0.dp, top = 10.dp, end = 0.dp, bottom = 10.dp),
-                modifier = Modifier.fillMaxHeight(.85f),
+                modifier = Modifier.fillMaxHeight(.8f),
             ) {
                 items(tournaments.size) {
                     LatestTournamentsItem(
@@ -113,8 +123,10 @@ fun LatestTournamentsItem(
     tournaments: Tournament,
     lightGradient: Brush,
     navController: NavController,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
     ) {
+
+    var showDialog by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
 
@@ -127,11 +139,16 @@ fun LatestTournamentsItem(
             .background(lightGradient)
             .padding(12.dp)
             .clickable {
-                navigate(
-                    navController = navController,
-                    destination = Screen.TournamentUpcomingMatches,
-                    arguments = listOf(tournaments.id)
-                )
+                if (!tournaments.isFinished) {
+                    navigate(
+                        navController = navController,
+                        destination = Screen.TournamentUpcomingMatches,
+                        arguments = listOf(tournaments.id)
+                    )
+                } else {
+                    showDialog = true
+                }
+
             },
     ) {
 
@@ -166,6 +183,20 @@ fun LatestTournamentsItem(
             }
 
         }
+
+        if(showDialog) {
+            AlertTournament(
+                onConfirm = {
+                    scope.launch {
+                        viewModel.deleteTournament(tournaments)
+                    }
+                    showDialog = false
+                },
+                onDismiss = { showDialog = false },
+                delete = true
+            )
+        }
+
     }
 }
 
