@@ -123,7 +123,7 @@ fun TournamentResult(
                     navigate(navController, Screen.MainScreen)
                 },
                 action = {
-                    navigate(navController, Screen.MainScreen)
+                    navigate(navController, Screen.WinnerView, arguments = listOf(tournamentId))
                 },
             )
         }

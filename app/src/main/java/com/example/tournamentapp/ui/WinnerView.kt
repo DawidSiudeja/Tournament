@@ -1,12 +1,11 @@
 package com.example.tournamentapp.ui
-
 import android.os.Build.VERSION.SDK_INT
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,21 +37,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun WinnerView(
     navController: NavController,
-    playerId: String,
     viewModel: TournamentViewModel,
     tournamentId: String
 ) {
 
-
-
-
     val scope = rememberCoroutineScope()
 
-    val winner = viewModel.getSpecifyPlayer(playerId.toInt()).collectAsState(
-        initial = PlayerStats(
-            playerName = "",
-            tournamentId = -1
-        )).value
+    var winner = viewModel.getWinner(tournamentId.toInt())
+        .collectAsState(emptyList()).value
 
     Box(
         modifier = Modifier
@@ -64,20 +56,37 @@ fun WinnerView(
             ImageTrophy(navController = navController)
 
             Text(
-                text = "Congratulations " + winner.playerName,
+                text = "Congratulations",
                 fontSize = 22.sp,
                 color = textColor,
-                fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .padding(bottom = 10.dp)
+                    .padding(bottom = 5.dp)
             )
 
-            Spacer(modifier = Modifier.height(100.dp))
+            var i = 0;
+
+
+            if(winner.isNotEmpty()) {
+                do {
+                    Text(
+                        text = winner[i].playerName,
+                        fontSize = 22.sp,
+                        color = textColor,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                    )
+                    i++
+                } while (i < winner.size)
+            }
+
+            Spacer(modifier = Modifier
+                .weight(.5f)
+            )
 
             GifImage()
 
             Spacer(modifier = Modifier
-                .fillMaxHeight(.55f)
+                .weight(.5f)
             )
 
             BottomMenu(
@@ -87,21 +96,12 @@ fun WinnerView(
                     scope.launch {
                         viewModel.setWinner(winner, tournamentId.toInt())
                     }
-
                     navigate(navController, Screen.MainScreen)
                 },
             )
-
-
-
         }
     }
-
 }
-
-
-
-
 
 @Composable
 fun GifImage(

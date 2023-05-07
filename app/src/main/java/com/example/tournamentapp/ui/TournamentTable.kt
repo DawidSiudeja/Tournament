@@ -60,9 +60,6 @@ fun TournamentTable(
     val playerStats = viewModel.getPlayerStats(tournamentId.toInt())
         .collectAsState(emptyList()).value
 
-    var winner = viewModel.getWinner(tournamentId.toInt())
-        .collectAsState(emptyList()).value
-
     val scope = rememberCoroutineScope()
 
     Box(
@@ -103,13 +100,9 @@ fun TournamentTable(
                     navigate(navController, Screen.MainScreen)
                 },
                 action = {
-                    viewModel.getWinner(tournamentId.toInt())
-                    if (winner.size == 1) {
-                        navigate(navController, Screen.WinnerView, arguments = listOf(winner[0].playerId,tournamentId))
-                    }
-                    if (winner.size > 1) {
-                        TODO()
-                    }
+
+                    navigate(navController, Screen.WinnerView, arguments = listOf(tournamentId))
+
                 },
             )
         }

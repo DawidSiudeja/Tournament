@@ -113,13 +113,8 @@ fun Navigation() {
         }
 
         composable(route = Screen.WinnerView.route +
-                "/{playerId}/{tournamentId}",
-            arguments = listOf(navArgument(
-                name = "playerId"
-            ){
-                type = NavType.StringType
-                defaultValue = ""
-            },
+                "/{tournamentId}",
+            arguments = listOf(
             navArgument(
                 name = "tournamentId"
             ) {
@@ -133,7 +128,7 @@ fun Navigation() {
 
             WinnerView(
                 navController = navController,
-                playerId = playerId,
+                //playerId = playerId,
                 tournamentId = tournamentId,
                 viewModel = viewModel()
             )

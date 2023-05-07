@@ -2,7 +2,13 @@ package com.example.tournamentapp
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tournamentapp.database.AppDatabase
@@ -12,6 +18,7 @@ import com.example.tournamentapp.database.points.PlayerStats
 import com.example.tournamentapp.database.points.PlayerStatsRepository
 import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.database.tournament.TournamentsRepository
+import com.example.tournamentapp.ui.theme.textColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -247,8 +254,26 @@ class TournamentViewModel(application: Application): AndroidViewModel(applicatio
         return playerStatsRepository.getPlayerWithTheMostPoints(tournamentId)
     }
 
-    suspend fun setWinner(player: PlayerStats, tournamentId: Int) {
-        repository.setTournamentWinner(player.playerName, tournamentId)
+    suspend fun setWinner(players: List<PlayerStats>, tournamentId: Int) {
+
+        var i = 0;
+        var winners = ""
+
+        if (players.size > 1) {
+
+            do {
+                winners += players[i].playerName + ", "
+                i++
+            } while (i < players.size)
+
+        } else {
+
+            winners = players[i].playerName
+
+        }
+
+
+        repository.setTournamentWinner(winners, tournamentId)
     }
     fun getSpecifyPlayer(playerId: Int): Flow<PlayerStats> {
         return playerStatsRepository.getSpecifPlayerStats(playerId)
