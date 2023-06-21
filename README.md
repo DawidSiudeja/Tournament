@@ -13,5 +13,5 @@ Polish version<br>
 <br>
 Aplikacja służąca do generowania pojedynków na podstawie listy dodanej przez użytkownika.<br>
 Tournament jest pomocny, jeśli nie chce nam się wypisywac wszystkich możliwych spotkań między graczami.<br>
-Aplikacja również zlicza punkty i wyłania zwycięce całego turnieju.<br>
+Aplikacja również zlicza punkty i wyłania zwyciężce całego turnieju.<br>
 W projekcie zostały wykorzystane takie technologie jak: Room Database, Jetpack Compose
