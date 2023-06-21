@@ -7,7 +7,7 @@ The tournament is helpful when we don't want to manually write all possible matc
 The application also keeps track of points and determines the winner of the tournament.<br>
 In the project, I utilized the following technologies: Room Database and Jetpack Compose.
 
-<br><br><br>
+<br><br>
 
 Polish version<br>
 <br>
