@@ -29,6 +29,7 @@ import com.example.tournamentapp.TournamentViewModel
 import com.example.tournamentapp.database.points.PlayerStats
 import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.navigation.Screen
+import com.example.tournamentapp.presentation.components.ImageTrophy
 import com.example.tournamentapp.ui.theme.darkGradient
 import com.example.tournamentapp.ui.theme.lightBlueGradient
 import com.example.tournamentapp.ui.theme.lightBlueGradientBG

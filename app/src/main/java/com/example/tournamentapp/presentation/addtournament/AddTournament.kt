@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.tournamentapp.navigation.Screen
+import com.example.tournamentapp.presentation.components.ImageTrophy
 import com.example.tournamentapp.ui.theme.*
 
 

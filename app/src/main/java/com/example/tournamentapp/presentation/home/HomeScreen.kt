@@ -1,10 +1,7 @@
 package com.example.tournamentapp.ui.theme
 
 
-import android.widget.Toast
-
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -21,20 +18,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
-import com.example.tournamentapp.MainViewModel
-import com.example.tournamentapp.R
+import com.example.tournamentapp.presentation.home.HomeViewModel
 import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.navigation.Screen
+import com.example.tournamentapp.presentation.components.ImageTrophy
 import com.example.tournamentapp.ui.AlertTournament
 import com.example.tournamentapp.ui.BottomMenu
-import com.example.tournamentapp.ui.ImageTrophy
 import com.example.tournamentapp.ui.navigate
 import kotlinx.coroutines.launch
 
@@ -42,7 +35,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: MainViewModel
+    viewModel: HomeViewModel
 ) {
 
     val tournaments =  viewModel.tournaments.collectAsState().value.reversed()
@@ -84,7 +77,7 @@ fun LatestTournaments(
     tournaments: List<Tournament>,
     lightGradient: Brush,
     navController: NavController,
-    viewModel: MainViewModel,
+    viewModel: HomeViewModel,
 ) {
     Box(
         modifier = Modifier
@@ -123,7 +116,7 @@ fun LatestTournamentsItem(
     tournaments: Tournament,
     lightGradient: Brush,
     navController: NavController,
-    viewModel: MainViewModel,
+    viewModel: HomeViewModel,
     ) {
 
     var showDialog by remember { mutableStateOf(false) }

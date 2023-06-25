@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.*
 import com.example.tournamentapp.TournamentViewModel
 import com.example.tournamentapp.database.tournament.Tournament
+import com.example.tournamentapp.presentation.components.ImageTrophy
 import com.example.tournamentapp.ui.theme.goldColor
 import com.example.tournamentapp.ui.theme.lightBlueGradient
 import com.example.tournamentapp.ui.theme.redColor

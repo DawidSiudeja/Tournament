@@ -52,6 +52,7 @@ import com.example.tournamentapp.TournamentViewModel
 import com.example.tournamentapp.database.match.SingleMatch
 import com.example.tournamentapp.database.tournament.Tournament
 import com.example.tournamentapp.navigation.Screen
+import com.example.tournamentapp.presentation.components.ImageTrophy
 import com.example.tournamentapp.ui.theme.darkGradient
 import com.example.tournamentapp.ui.theme.goldColor
 import com.example.tournamentapp.ui.theme.lightGradient

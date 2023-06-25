@@ -1,4 +1,4 @@
-package com.example.tournamentapp
+package com.example.tournamentapp.presentation.home
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel(application: Application): AndroidViewModel(application) {
+class HomeViewModel(application: Application): AndroidViewModel(application) {
 
     private val repository: TournamentsRepository
     private val singleMatchRepository: SingleMatchRepository
